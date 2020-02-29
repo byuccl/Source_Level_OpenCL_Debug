@@ -1,0 +1,3 @@
+hw_mandelbrot_frame:/home/rose/rose/benchmarks/exm_opencl_mandelbrot_x64_linux/mandelbrot/device/mandelbrot_kernel.c:49
+x:57:1, y:58:2, xSqr:59:3, ySqr:60:4, iterations:61:5, xSqr:73:6, ySqr:74:7, y:76:8, x:77:9, iterations:80:10, framebuffer:84:11
+

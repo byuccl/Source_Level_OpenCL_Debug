@@ -1,0 +1,134 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> OpenCL Debug Trace</title>
+    <!-- <meta name="description" content="The configurable computing lab focuses on FPGAs and FPGA-like devices, researching new tools and techniques for reliability, security, debug, high-level synthesis, open-source CAD, and hardware accelerated applications. -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+
+    <link rel="canonical" href="http://yourdomain.com/papers/">
+    <!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png"> -->
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700&amp;display=swap" rel="stylesheet">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53877117-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-53877117-2');
+    </script> -->
+</head>
+
+<body>
+
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">OpenCL Debug Trace</a>
+            <!-- <ul class="nav_ul">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/news/">News</a>
+                <a class="nav-link active" href="/papers/">Papers</a>
+                <a class="nav-link" href="/people/">People</a>
+                <a class="nav-link" href="/projects/">Projects</a>
+            </ul> -->
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Thread Selection -->
+        <div class="dropdown option_label thread">
+            Thread: &nbsp;
+            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownThread"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{thread_names | sort | first}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownThread">
+                {% for thread_name in thread_names | sort %}
+                <li><a class="dropdown-item" href="#"> {{thread_name }} </a></li>
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+
+        <!-- Variables -->
+        <div class="option_label">
+            Variable Assignments: &nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="select_all_button">Select All</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="select_none_button">Select None</button>
+            {% for v in var_list | sort(attribute='line_num') %}
+
+            <div class="row vars">
+                <div class="col-sm-3 my-auto"> {{v.name}} (line {{v.line_num}}) </div>
+                <div class="col-sm-3 my-auto">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="check_{{v.ID}}">
+                        <label class="form-check-label" for="exampleCheck1">Show</label>
+                    </div>
+                    <!-- <div class="btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                                <input type="checkbox" checked> Show
+                            </label>
+                        </div> -->
+                </div>
+                <div class="col-sm-6 my-auto">
+                    <a href={{v.filepath}}>{{v.filename}}:{{v.line_num}}</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <hr>
+        <div class="generate">
+            <button type="button" class="btn btn-primary" id="generate_button">Generate Trace Timeline</button>
+        </div>
+        <hr>
+        <div class="trace-table">
+            <table class="table table-striped" id="trace_table">
+                <thead>
+                    <tr>
+                        <!-- <th> Time </th> -->
+                        <!-- <th scope="col"> Var1 </th> -->
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <footer class="site-footer" id="footer">
+        <div class="wrapper">
+            <p>OpenCL Debugger provided by the Configurable Computing Lab <br> Department of Electrical and Computer
+                Engineering, Brigham Young University <br>
+                <a href="mailto:jgoeders@byu.edu">jgoeders@byu.edu</a></p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <!-- 
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <script type="text/javascript" src="{{ url_for('static',filename='main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='trace.js') }}"></script>
+
+</body>
+
+</html>
