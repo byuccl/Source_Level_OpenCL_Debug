@@ -12,7 +12,7 @@ Run “make install” in $ROSE_HOME/build/exampleTranslators/defaultTranslator/
 
 ### Modifying the Kernel File
 
-Add an "hlsDebugConfig.txt" file to the directory with the OpenCL file. This file contains kernel names, and a buffer size. An example would be:
+Add an `hlsDebugConfig.txt` file to the directory with the OpenCL file. This file contains kernel names, and a buffer size. An example would be:
 
 KERNEL_NAME fetch
 
@@ -24,14 +24,14 @@ The buffer size needs to be a power of two for the calculation offsets into the 
 
 Run “python3 trace_selection_gui/hlstool.py” with the OpenCL file as an argument. 
  
-The script modifies the OpenCL code to look like C code, and replace the ".cl" extension with a ".c" extension. If then calls the defaulTranslator ROSE transformation. The transformation tool collects all of the assignment variables in the kernels, and records them and their unique identifiers to a file called "hlsDebugVariableList.txt" in the directory with the OpenCL file. After recording the data, it calls a the python gui. In the gui the user can select variables to record, and select the "Confirm" button in the top right corner. 
+The script modifies the OpenCL code to look like C code, and replace the `.cl` extension with a `.c` extension. If then calls the defaulTranslator ROSE transformation. The transformation tool collects all of the assignment variables in the kernels, and records them and their unique identifiers to a file called `hlsDebugVariableList.txt` in the directory with the OpenCL file. After recording the data, it calls a the python gui. In the gui the user can select variables to record, and select the `Confirm` button in the top right corner. 
  
-After the user confirms their selection, the selection is recorded to a file called "hlsDebugSelectedVar.txt" in the directory with the OpenCL file. The ROSE transformation then reads the "hlsDebugSelectedVar.txt" file and inserts the recording instructions after each of the selected variable assignments.
+After the user confirms their selection, the selection is recorded to a file called `hlsDebugSelectedVar.txt` in the directory with the OpenCL file. The ROSE transformation then reads the `hlsDebugSelectedVar.txt` file and inserts the recording instructions after each of the selected variable assignments.
   
 
 ### Modifying the Host Code
 
-The host file needs to be modified to retrieve the trace buffer. An extra argument needs to be added to the kernel, which will contain the trace buffer. The size of the trace buffer is the size of each threads trace buffer times the number of threads. Each device gets its own trace buffer. The variable type of the trace buffer is dependent upon the type of the trace buffer in the kernel. By default the trace buffer is of type "long." This can be manually changed.
+The host file needs to be modified to retrieve the trace buffer. An extra argument needs to be added to the kernel, which will contain the trace buffer. The size of the trace buffer is the size of each threads trace buffer times the number of threads. Each device gets its own trace buffer. The variable type of the trace buffer is dependent upon the type of the trace buffer in the kernel. By default the trace buffer is of type `long`. This can be manually changed.
 
 For example, in the Intel design test Time-Domain FIR Filter, the following code would be added:
 
@@ -89,7 +89,7 @@ The user should only select variables in the top level kernel, as support for re
 
 The OpenCL Debug Trace viewer requires the device IDs to not be less than (2^28) + 1 or 268435457
 
-One of the biggest limitations is the type of OpenCL directives and types that are currently supported. The python script "hlstool.py" replaces many of the OpenCL directives with commented out versions. For example, `__kernel` is replaced with `\*__kernel*\` and the same occurs for multiple OpenCL directives, which is shown in the "hlstool.py" file. After the ROSE transformation finished, the python script removes the comments from these directives, and adds directives to the new trace buffer argument. If there are other OpenCL types or directives, they need to be added as an extern argument by the user before running the tool. This will allow the tool to treat the extern OpenCL types or directives as normal C code. The user will need to delete their changes in the new generated ".cl" file.   
+One of the biggest limitations is the type of OpenCL directives and types that are currently supported. The python script `hlstool.py` replaces many of the OpenCL directives with commented out versions. For example, `__kernel` is replaced with `\*__kernel*\` and the same occurs for multiple OpenCL directives, which is shown in the `hlstool.py` file. After the ROSE transformation finished, the python script removes the comments from these directives, and adds directives to the new trace buffer argument. If there are other OpenCL types or directives, they need to be added as an extern argument by the user before running the tool. This will allow the tool to treat the extern OpenCL types or directives as normal C code. The user will need to delete their changes in the new generated `.cl` file.   
 
 ## Testing
 
