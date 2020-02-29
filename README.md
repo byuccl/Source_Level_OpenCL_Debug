@@ -32,8 +32,7 @@ OpenCL file at the moment.
   After the user confirms their selection, the selection is recorded to a file. ROSE then continues to execute, reads the
   selection from the file, and inserts the recording instructions
   
-  Note the default type of the trace buffer is long, but it can be manually changed in the OpenCL kernel to whatever the user  
-  desires. 
+  Note the default type of the trace buffer is long, but it can be manually changed in the OpenCL kernel to whatever the user desires. 
 
 ### Modifying the Host Code
 
