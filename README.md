@@ -7,7 +7,9 @@ Copy DefaultTranslator.c to $ROSE_HOME/src/exampleTranslators/defaultTranslator/
 
 Run “make install” in $ROSE_HOME/build/exampleTranslators/defaultTranslator/
 
-## Compiling a Design with Debug Instrumentation
+## Instrumenting a Design with Debug Instructions
+
+### Modifying the Kernel File
 Add an "hlsDebugConfig.txt" file to the directory with the OpenCL file. This file contains kernel names, and a buffer size. 
 An example would be:
 
@@ -33,13 +35,10 @@ OpenCL file at the moment.
   Note the default type of the trace buffer is long, but it can be manually changed in the OpenCL kernel to whatever the user  
   desires. 
 
+### Modifying the Host Code
+
 The host file needs to be modified to retrieve the trace buffer. An extra argument needs to be added to the kernel, which will contain the trace buffer. The size of the trace buffer is the size of each threads trace buffer times the number of threads. Each device gets its own thread. The type is dependent upon the type of the trace buffer in the kernel.
 
-## Compiling the OpenCL Design
-
-## Running the OpenCL Design
-
-## Viewing the Debug Trace
 
 After retrieving the trace buffer kernel argument, the buffer needs to be dumped to a file. 
 The layout is as follows, all data separated by a space:
@@ -52,6 +51,12 @@ For example if there were 2 devices, 1 thread per device, a trace buffer size of
 
 Note the device IDs may not be less than (2^28) + 1 or 268435457
 
+## Compiling the OpenCL Design
+
+## Running the OpenCL Design
+
+## Viewing the Debug Trace
+
 To run the HTML-based trace viewer:
 
   - Copy the produced trace buffer output file to `trace_viewer/tb.txt`
@@ -59,3 +64,6 @@ To run the HTML-based trace viewer:
   - Navigate to the `trace_viewer` directory
   - Run `./tb_to_html.py tb.txt hlsDebugVariableList.txt`
   - Browse to [http://localhost:5000/](http://localhost:5000/)
+  
+  
+## Limitations
