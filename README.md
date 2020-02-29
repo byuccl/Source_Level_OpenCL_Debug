@@ -33,6 +33,25 @@ After the user confirms their selection, the selection is recorded to a file cal
 
 The host file needs to be modified to retrieve the trace buffer. An extra argument needs to be added to the kernel, which will contain the trace buffer. The size of the trace buffer is the size of each threads trace buffer times the number of threads. Each device gets its own trace buffer. The variable type of the trace buffer is dependent upon the type of the trace buffer in the kernel. By default the trace buffer is of type "long." This can be manually changed.
 
+For example, in the Intel design test Time-Domain FIR Filter, the following code would be added:
+
+In global space:
+
+`cl_mem dbgTraceBuffer;`
+
+`cl_float *traceBuffer;`
+
+In function `tdfirFPGA` before `clEnqueueNDRangeKernel`:
+
+`dbgTraceBuffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_CHANNEL_2_INTEL_FPGA. sizeof(float) * 4096, NULL, &err);`
+
+`traceBuffer = (float*) alignedMalloc(sizeof(float) * 4096);`
+
+`err |= clSetKernelArg(kernel, 5, sizeof(cl_mem), &dbgTraceBuffer);`
+
+In function `tdfirFPGA` after `clEnqueueNDRangeKernel`:
+
+`err = clEnqueueReadBuffer(queue, dbgTraceBuffer, CL_TURE, 0, sizeof(float) * 4096, traceBuffer, 0, NULL, &myEvent);`
 
 
 After retrieving the trace buffer kernel argument, the buffer needs to be dumped to a file. The layout is as follows, all data separated by a space:
@@ -69,6 +88,8 @@ The python portion of the tool currently only supports a single OpenCL file.
 The user should only select variables in the top level kernel, as support for recording variables in other called functions has been disabled due to excessive overhead in the generated RTL design. If the user  wants to record variables in called functions they should be inlined first.
 
 The OpenCL Debug Trace viewer requires the device IDs to not be less than (2^28) + 1 or 268435457
+
+One of the biggest limitations is the type of OpenCL directives and types that are currently supported. The python script "hlstool.py" replaces many of the OpenCL directives with commented out versions. For example, `__kernel` is replaced with `\*__kernel*\` and the same occurs for multiple OpenCL directives, which is shown in the "hlstool.py" file. After the ROSE transformation finished, the python script removes the comments from these directives, and adds directives to the new trace buffer argument. If there are other OpenCL types or directives, they need to be added as an extern argument by the user before running the tool. This will allow the tool to treat the extern OpenCL types or directives as normal C code. The user will need to delete their changes in the new generated ".cl" file.   
 
 ## Testing
 
