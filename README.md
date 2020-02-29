@@ -1,4 +1,5 @@
 
+## Install and Setup
 Follow instructions on the ROSE compiler github page to install ROSE. 
 $ROSE_HOME  needs to be set according to the instructions for the tool https://github.com/rose-compiler/rose/wiki
 
@@ -6,6 +7,7 @@ Copy DefaultTranslator.c to $ROSE_HOME/src/exampleTranslators/defaultTranslator/
 
 Run “make install” in $ROSE_HOME/build/exampleTranslators/defaultTranslator/
 
+## Compiling a Design with Debug Instrumentation
 Add an "hlsDebugConfig.txt" file to the directory with the OpenCL file. This file contains kernel names, and a buffer size. 
 An example would be:
 
@@ -33,6 +35,12 @@ OpenCL file at the moment.
 
 The host file needs to be modified to retrieve the trace buffer. An extra argument needs to be added to the kernel, which will contain the trace buffer. The size of the trace buffer is the size of each threads trace buffer times the number of threads. Each device gets its own thread. The type is dependent upon the type of the trace buffer in the kernel.
 
+## Compiling the OpenCL Design
+
+## Running the OpenCL Design
+
+## Viewing the Debug Trace
+
 After retrieving the trace buffer kernel argument, the buffer needs to be dumped to a file. 
 The layout is as follows, all data separated by a space:
 
@@ -44,4 +52,10 @@ For example if there were 2 devices, 1 thread per device, a trace buffer size of
 
 Note the device IDs may not be less than (2^28) + 1 or 268435457
 
-The parsing and generation of the OpenCL Debug Trace viewer is done by TODO
+To run the HTML-based trace viewer:
+
+  - Copy the produced trace buffer output file to `trace_viewer/tb.txt`
+  - Copy the original configuration file to `trace_viewer/hlsDebugVariableList.txt`
+  - Navigate to the `trace_viewer` directory
+  - Run `./tb_to_html.py tb.txt hlsDebugVariableList.txt`
+  - Browse to [http://localhost:5000/](http://localhost:5000/)
